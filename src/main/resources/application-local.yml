@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/hub
+    username: hub
+    password: p@ssw0rd

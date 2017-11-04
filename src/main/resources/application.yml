@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    driverClassName: org.postgresql.Driver
+    platform: postgres
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+
+mybatis:
+  mapper-locations: classpath:repository/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
