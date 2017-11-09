@@ -9,5 +9,7 @@ public class ArticleCategory {
 
     private Long parentId;
 
-    private String categoryName;
+    private String name;
+
+    private Long priority;
 }

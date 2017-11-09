@@ -9,6 +9,8 @@ public class Article {
 
     private Long id;
 
+    private Long categoryId;
+
     private String title;
 
     private String content;
@@ -16,4 +18,6 @@ public class Article {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private Long priority;
 }
