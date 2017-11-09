@@ -2,15 +2,29 @@ html {
     font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
 }
 
+select.error,
+input.error,
+textarea.error {
+    border: 1px solid #f5c6cb;
+}
+
+ul.error-detail {
+    margin: 0;
+    color: #721c24;
+}
+
 nav.navbar {
     margin-bottom: 1.5rem;
 }
+
 button.btn {
     cursor: pointer;
 }
 
-.title-guild{
+.title-guild {
     background: #f8f9fa;
+    border-left: 3px solid lightgray;
+
     font-size: 1.5rem;
     height: 70px;
     letter-spacing: .2rem;

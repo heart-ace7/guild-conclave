@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>記事の更新</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2>
+        <span th:text="${guildName}">ギルド</span>記事の更新
+    </h2>
+    <form th:action="@{/guilds/{guildId}/articles/{articleId}/update(guildId=${guildId},articleId=${articleId})}"
+          th:method="put" th:object="${articleForm}">
+        <div th:include="article/_form"></div>
+
+        <button class="btn btn-primary" type="submit">更新する</button>
+    </form>
+</div>
+</body>
+</html>

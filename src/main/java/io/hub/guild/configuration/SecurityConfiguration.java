@@ -20,10 +20,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/")
-                .usernameParameter("email")
-                .passwordParameter("password");
+                .failureForwardUrl("/login-fail");
         http.logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/");

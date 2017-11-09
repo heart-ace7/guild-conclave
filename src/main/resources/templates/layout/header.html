@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
 <body>
-    <nav class="navbar navbar-light bg-light" layout:fragment="header">
-        <a class="navbar-brand mr-auto" th:href="@{/}">Guild Hub</a>
-    </nav>
+<nav class="navbar navbar-light bg-light" layout:fragment="header">
+    <a class="navbar-brand mr-auto" th:href="@{/}">Guild Hub</a>
+
+    <a th:if="${!session.containsKey('SPRING_SECURITY_CONTEXT')}"
+       th:href="@{/login}" class="btn btn-outline-secondary">
+        ログイン
+    </a>
+
+    <div th:if="${session.containsKey('SPRING_SECURITY_CONTEXT')}" class="btn-group">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            <span sec:authentication="name">アカウント</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="javascript:$('#form-logout').submit()">ログアウト</a>
+        </div>
+        <form id="form-logout" th:action="@{/logout}" th:method="post" style="display: none;"></form>
+    </div>
+</nav>
 </body>
 </html>

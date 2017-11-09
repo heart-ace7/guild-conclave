@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/no-header-layout">
 <head>
-    <meta charset="UTF-8">
-    <title>エラー | Guild Hub</title>
+    <title>エラー</title>
+
+    <style>
+        .error-container {
+            padding: 2rem 0;
+        }
+        .error-message-box {
+            color: gray;
+        }
+        .error-message-box > p {
+            margin-top: 1rem;
+            font-size: .9rem;
+        }
+        .error-message-box > a {
+            font-size: .9rem;
+        }
+
+        .error-img-box {
+            padding-top: 1rem;
+        }
+        .error-img-box > img {
+            width: 110%
+        }
+    </style>
 </head>
+
 <body>
-    sorry, error page.
+<div layout:fragment="content">
+    <div class="row" style="margin-top: 5rem;">
+
+        <div class="offset-lg-3 col-lg-4 col-6 error-container">
+            <h2>Guild Hub</h2>
+            <div class="error-message-box">
+                <p>エラーが発生しました.</p>
+                <p>繰り返しエラーが発生する場合は管理者に問い合わせを行ってください.</p>
+                <a th:href="@{/}">topへ戻る</a>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-6 error-img-box">
+            <img th:src="@{/img/sorry-ace-10g.jpg}" alt="sorry" />
+        </div>
+    </div>
+</div>
 </body>
 </html>

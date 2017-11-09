@@ -1,8 +1,7 @@
 package io.hub.guild.component;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.google.common.base.Strings;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,12 +13,14 @@ import java.util.Collections;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return null;
-//        return new org.springframework.security.core.userdetails.User(
-//                null,
-//                null,
-//                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-//        );
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+        if (Strings.isNullOrEmpty(username)) {
+            throw new UsernameNotFoundException("username not found.");
+        }
+        return new org.springframework.security.core.userdetails.User(
+                username,
+                "$2a$10$jaYchwZTGuhVyKLUAwQGiOQlgcCEd40k3bp8LqWmf9roLTRIcgPjG",
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
     }
 }

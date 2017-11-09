@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>wiki</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <span th:text="${model.guildName}">ギルド</span>記事一覧
+
+    <a th:href="@{/guilds/{id}/articles/input(id=${guildId})}" class="btn btn-outline-secondary">
+        <i class="fa fa-plus"></i>
+        記事を書く
+    </a>
+
+    <ul>
+        <li th:each="article : ${model.articles}" th:text="${article.title}">
+            article title
+        </li>
+    </ul>
+</div>
+</body>
+</html>

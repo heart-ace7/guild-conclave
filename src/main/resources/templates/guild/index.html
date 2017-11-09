@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout/layout">
 <head>
-    <title>TOP</title>
+    <title th:text="${guildName}">ギルド</title>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
             <div class="col">
                 <span>セブンス・リバース &gt;</span>
                 <div class="title-guild">
-                    FFL
+                    <span th:text="${guildName}"></span>
                 </div>
             </div>
         </div>
@@ -27,10 +27,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">
-                            <a href="#">Wiki</a>
+                            <a th:href="@{/guilds/1/articles}">
+                                <i class="fa fa-bookmark-o"></i>
+                                Wiki
+                            </a>
                         </h4>
                         <h6 class="card-subtitle mb-2 text-muted">
-                            FFLだけで共有する攻略情報まとめ
+                            <span th:text="${guildName}"></span>だけで共有する攻略情報まとめ
                         </h6>
                     </div>
                 </div>
@@ -39,10 +42,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">
-                            <a href="#">Photo</a>
+                            <a href="#">
+                                <i class="fa fa-camera"></i>
+                                Photo
+                            </a>
                         </h4>
                         <h6 class="card-subtitle mb-2 text-muted">
-                            FFLだけで共有する写真
+                            <span th:text="${guildName}"></span>だけで共有する写真
                         </h6>
                     </div>
                 </div>

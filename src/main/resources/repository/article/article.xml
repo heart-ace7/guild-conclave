@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.hub.guild.repository.article.ArticleRepository">
+
+    <select id="findAll" resultType="io.hub.guild.model.entity.article.Article">
+        SELECT * FROM articles ORDER BY created_at DESC;
+    </select>
+
+    <select id="findById" resultType="io.hub.guild.model.entity.article.Article">
+        SELECT * FROM articles WHERE id = #{articleId}
+    </select>
+
+    <insert id="insert" parameterType="io.hub.guild.model.entity.article.Article">
+        INSERT INTO articles (
+        title,
+        content,
+        created_at
+        ) VALUES (
+        #{entity.title},
+        #{entity.content},
+        #{entity.createdAt}
+        );
+    </insert>
+
+    <update id="update" parameterType="io.hub.guild.model.entity.article.Article">
+        UPDATE articles
+        SET
+        title = #{entity.title},
+        content = #{entity.content},
+        updated_at = #{entity.updatedAt}
+        WHERE
+        id = #{entity.id}
+    </update>
+
+</mapper>
