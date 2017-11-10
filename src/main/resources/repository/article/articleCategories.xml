@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.hub.guild.repository.article.ArticleCategoryRepository">
+
+    <select id="findAllAsTree" resultType="io.hub.guild.model.entity.article.TreeArticleCategory">
+        SELECT
+        cate1.id AS "category_id",
+        cate1.name AS "category_name",
+        cate2.id AS "subCategory_id",
+        cate2.name AS "subCategory_name"
+
+        FROM article_categories cate1
+
+        INNER JOIN article_categories cate2
+        ON cate1.id = cate2.parent_id
+
+        WHERE cate1.parent_id IS NULL
+
+        ORDER BY cate1.priority ASC, cate2.priority ASC;
+    </select>
+
+</mapper>

@@ -6,6 +6,6 @@ CREATE TABLE
   content    TEXT         NOT NULL,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP,
-  article_id INT NOT NULL REFERENCES article_categories(id),
+  category_id INT NOT NULL REFERENCES article_categories(id),
   priority   INT NOT NULL
 );
