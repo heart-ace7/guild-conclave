@@ -6,6 +6,18 @@
 <head>
     <meta charset="UTF-8">
     <title>記事の更新</title>
+
+    <link rel="stylesheet" th:href="@{/css/simplemde.min.css}" href="../../static/css/simplemde.min.css">
+    <script th:src="@{/js/simplemde.min.js}" src="../../static/js/simplemde.min.js"></script>
+    <script>
+        $(function () {
+            new SimpleMDE({
+                element: $("#content")[0],
+                hideIcons: HUB.simplemde.config.hideIcons,
+                showIcons: HUB.simplemde.config.showIcons
+            });
+        });
+    </script>
 </head>
 <body>
 <div layout:fragment="content">

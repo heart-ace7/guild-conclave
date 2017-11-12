@@ -5,18 +5,13 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 隣接リスト型で取り出したカテゴリ-記事を持つentityクラス.
+ * ツリー階層の記事カテゴリentityクラス.
  */
 @Data
 public class TreeArticleCategory {
+    private Long id;
 
-    private Long categoryId;
+    private String name;
 
-    private String categoryName;
-
-    private Long subCategoryId;
-
-    private String subCategoryName;
-
-    private List<String> articleTitles;
+    private List<TreeArticleCategory> subCategories;
 }

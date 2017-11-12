@@ -17,8 +17,20 @@
     </a>
 
     <ul>
-        <li th:each="article : ${model.articles}" th:text="${article.title}">
-            article title
+        <li th:each="primaryCategory : ${model.categories}">
+            <span th:text="${primaryCategory.name}">primary category</span>
+
+            <ul th:if="!${#lists.isEmpty(primaryCategory.secondaryCategories)}">
+                <li th:each="secondaryCategory : ${primaryCategory.secondaryCategories}">
+                    <span th:text="${secondaryCategory.name}">secondary category</span>
+
+                    <ul th:if="!${#lists.isEmpty(secondaryCategory.articles)}">
+                        <li th:each="article : ${secondaryCategory.articles}">
+                            <span th:text="${article.title}">article title</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </li>
     </ul>
 </div>

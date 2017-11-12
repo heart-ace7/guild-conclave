@@ -1,17 +1,22 @@
 package io.hub.guild.controller.article;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import io.hub.guild.consts.ArticleCategory;
 import io.hub.guild.model.entity.article.Article;
 import io.hub.guild.model.form.article.ArticleForm;
+import io.hub.guild.model.internal.article.ArticleAndCategoryDto;
 import io.hub.guild.model.view.article.ArticleIndexDto;
 import io.hub.guild.model.view.article.ArticleIndexDto.ArticleDto;
+import io.hub.guild.model.view.article.ArticleIndexDto.PrimaryCategoryDto;
+import io.hub.guild.model.view.article.ArticleIndexDto.SecondaryCategoryDto;
 import io.hub.guild.model.view.article.ArticleShowDto;
 import io.hub.guild.service.article.ArticleService;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,23 +42,29 @@ public class ArticleController {
      */
     @GetMapping("guilds/{guildId}/articles")
     public ModelAndView index(@PathVariable final Long guildId) {
-        final List<Article> articles = articleService.fetchArticle(guildId);
+        final List<ArticleAndCategoryDto> articles = articleService.fetchArticles(guildId);
 
-        final PegDownProcessor processor = new PegDownProcessor(); // not thread-safe
-        final List<ArticleDto> articleDto = articles.stream()
-                .map(entity -> {
-                    final ArticleDto dto = new ArticleDto();
-                    dto.setTitle(entity.getTitle());
-                    dto.setHtmlContent(processor.markdownToHtml(entity.getContent()));
-                    return dto;
+        final List<PrimaryCategoryDto> categories = articles.stream()
+                .map(dto -> {
+                    final List<SecondaryCategoryDto> secondaries = dto.getSubCategories().stream()
+                            .map(subCategory -> {
+                                final List<ArticleDto> articleDtos = Lists.newArrayList();
+
+                                if (!CollectionUtils.isEmpty(subCategory.getArticles())) {
+                                    subCategory.getArticles().stream()
+                                            .map(article -> new ArticleDto(article.getId(), article.getTitle()))
+                                            .forEach(articleDtos::add);
+                                }
+                                return new SecondaryCategoryDto(subCategory.getCategoryName(), articleDtos);
+                            })
+                            .collect(Collectors.toList());
+
+                    return new PrimaryCategoryDto(dto.getCategoryName(), secondaries);
                 })
                 .collect(Collectors.toList());
 
-        final ArticleIndexDto viewDto = new ArticleIndexDto();
-        viewDto.setGuildName("FFL");
-        viewDto.setArticles(articleDto);
-
-        return new ModelAndView("article/index", "model", viewDto);
+        return new ModelAndView("article/index",
+                "model", new ArticleIndexDto(guildId, "FFL", categories));
     }
 
     /**

@@ -4,16 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.hub.guild.repository.article.ArticleCategoryRepository">
 
-    <select id="findAllAsTree" resultType="io.hub.guild.model.entity.article.TreeArticleCategory">
+    <resultMap id="TreeArticleCategory" type="io.hub.guild.model.entity.article.TreeArticleCategory">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+
+        <collection property="subCategories" ofType="io.hub.guild.model.entity.article.TreeArticleCategory">
+            <id property="id" column="sub_category.id"/>
+            <result property="name" column="sub_category.name"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAllAsTree" resultMap="TreeArticleCategory">
         SELECT
-        cate1.id AS "category_id",
-        cate1.name AS "category_name",
-        cate2.id AS "subCategory_id",
-        cate2.name AS "subCategory_name"
+        cate1.id        AS "id",
+        cate1.name      AS "name",
+        cate2.id        AS "sub_category.id",
+        cate2.name      AS "sub_category.name"
 
         FROM article_categories cate1
 
-        INNER JOIN article_categories cate2
+        LEFT OUTER JOIN article_categories cate2
         ON cate1.id = cate2.parent_id
 
         WHERE cate1.parent_id IS NULL
