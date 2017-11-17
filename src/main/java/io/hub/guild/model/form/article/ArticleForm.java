@@ -11,6 +11,9 @@ public class ArticleForm {
     @NotNull(message = "必ず選択してください.")
     private Long categoryId;
 
+    @NotNull(message = "必ず選択してください.")
+    private Long subCategoryId;
+
     @Length(min = 1, max = 255)
     private String title;
 

@@ -18,6 +18,8 @@ public class ArticleIndexDto {
     @Data
     @AllArgsConstructor
     public static class PrimaryCategoryDto {
+        private Long id;
+
         private String name;
 
         private List<SecondaryCategoryDto> secondaryCategories;

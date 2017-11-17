@@ -7,6 +7,8 @@ import java.util.List;
 
 @Data
 public class ArticleAndCategoryDto {
+    private Long categoryId;
+
     private String categoryName;
 
     private List<ArticleDto> articles;

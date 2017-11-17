@@ -13,6 +13,7 @@
         $(function () {
             new SimpleMDE({
                 element: $("#content")[0],
+                autoDownloadFontAwesome: false,
                 hideIcons: HUB.simplemde.config.hideIcons,
                 showIcons: HUB.simplemde.config.showIcons
             });
@@ -21,9 +22,6 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h2>
-        <span th:text="${guildName}">ギルド</span>記事の新規作成
-    </h2>
     <form th:action="@{/guilds/{id}/articles/create(id=${guildId})}" th:method="POST" th:object="${articleForm}">
         <div th:include="article/_form"></div>
 

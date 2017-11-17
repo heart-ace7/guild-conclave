@@ -2,8 +2,8 @@ package io.hub.guild.controller.article;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import io.hub.guild.consts.ArticleCategory;
 import io.hub.guild.model.entity.article.Article;
+import io.hub.guild.model.entity.article.ArticleCategory;
 import io.hub.guild.model.form.article.ArticleForm;
 import io.hub.guild.model.internal.article.ArticleAndCategoryDto;
 import io.hub.guild.model.view.article.ArticleIndexDto;
@@ -15,6 +15,7 @@ import io.hub.guild.service.article.ArticleService;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
+@Secured("ROLE_USER")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
@@ -59,7 +61,7 @@ public class ArticleController {
                             })
                             .collect(Collectors.toList());
 
-                    return new PrimaryCategoryDto(dto.getCategoryName(), secondaries);
+                    return new PrimaryCategoryDto(dto.getCategoryId(), dto.getCategoryName(), secondaries);
                 })
                 .collect(Collectors.toList());
 
@@ -100,7 +102,7 @@ public class ArticleController {
      */
     @GetMapping("guilds/{guildId}/articles/input")
     public ModelAndView input(@PathVariable final Long guildId, final ArticleForm articleForm) {
-        return renderInput(guildId);
+        return renderInput(guildId, articleForm.getCategoryId());
     }
 
     /**
@@ -114,9 +116,9 @@ public class ArticleController {
     @PostMapping("guilds/{guildId}/articles/create")
     public ModelAndView create(@PathVariable final Long guildId, @Valid final ArticleForm articleForm, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return renderInput(guildId);
+            return renderInput(guildId, articleForm.getCategoryId());
         }
-        articleService.createArticle(articleForm.getTitle(), articleForm.getContent());
+        articleService.createArticle(articleForm.getSubCategoryId(), articleForm.getTitle(), articleForm.getContent());
 
         return new ModelAndView("redirect:/guilds/" + guildId + "/articles");
     }
@@ -132,11 +134,14 @@ public class ArticleController {
     @GetMapping("guilds/{guildId}/articles/{articleId}/edit")
     public ModelAndView edit(@PathVariable final Long guildId, @PathVariable final Long articleId, final ArticleForm articleForm) {
         final Article article = articleService.fetchArticle(guildId, articleId);
+        final ArticleCategory category = articleService.fetchCategoryBy(article.getCategoryId());
 
+        articleForm.setCategoryId(category.getParentId());
+        articleForm.setSubCategoryId(category.getId());
         articleForm.setTitle(article.getTitle());
         articleForm.setContent(article.getContent());
 
-        return renderEdit(guildId);
+        return renderEdit(guildId, articleForm.getCategoryId());
     }
 
     /**
@@ -151,25 +156,25 @@ public class ArticleController {
     @PutMapping("guilds/{guildId}/articles/{articleId}/update")
     public ModelAndView update(@PathVariable final Long guildId, @PathVariable final Long articleId, @Valid final ArticleForm articleForm, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return renderEdit(guildId);
+            return renderEdit(guildId, articleForm.getCategoryId());
         }
-        articleService.updateArticle(articleId, articleForm.getTitle(), articleForm.getContent());
+        articleService.updateArticle(articleId, articleForm.getSubCategoryId(), articleForm.getTitle(), articleForm.getContent());
 
         return new ModelAndView("redirect:/guilds/" + guildId + "/articles");
     }
 
-    private ModelAndView renderInput(final Long guildId) {
+    private ModelAndView renderInput(final Long guildId, final Long categoryId) {
         final Map<String, Object> params = ImmutableMap.of(
                 "guildName", "FFL",
-                "categories", ArticleCategory.values()
+                "category", articleService.fetchCategoriesBy(categoryId)
         );
         return new ModelAndView("article/input", params);
     }
 
-    private ModelAndView renderEdit(final Long guildId) {
+    private ModelAndView renderEdit(final Long guildId, final Long categoryId) {
         final Map<String, Object> params = ImmutableMap.of(
                 "guildName", "FFL",
-                "categories", ArticleCategory.values()
+                "category", articleService.fetchCategoriesBy(categoryId)
         );
         return new ModelAndView("article/edit", params);
     }

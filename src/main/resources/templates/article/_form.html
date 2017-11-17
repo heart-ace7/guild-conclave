@@ -4,24 +4,30 @@
 </head>
 <body>
 <div class="form-group row">
-    <label for="category" class="col-sm-2 col-form-label">カテゴリー</label>
+    <label for="subCategory" class="col-sm-2 col-form-label">
+        <span th:text="${category.name}"></span>
+        <i class="fa fa-caret-right" aria-hidden="true"></i>
+    </label>
     <div class="col-sm-10">
-        <select name="category" id="category" class="form-control" th:field="*{categoryId}" th:errorclass="error">
+        <select name="subCategory" id="subCategory" class="form-control" th:field="*{subCategoryId}"
+                th:errorclass="error">
             <option value="">未選択</option>
-            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}">
+            <option th:each="subCategory : ${category.subCategories}"
+                    th:value="${subCategory.id}" th:text="${subCategory.name}">
                 カテゴリー名
             </option>
         </select>
-        <ul th:if="${#fields.hasErrors('categoryId')}" class="error-detail">
-            <li th:each="error : ${#fields.errors('categoryId')}" th:text="${error}"></li>
+        <ul th:if="${#fields.hasErrors('subCategoryId')}" class="error-detail">
+            <li th:each="error : ${#fields.errors('subCategoryId')}" th:text="${error}"></li>
         </ul>
     </div>
+    <input type="hidden" th:field="*{categoryId}"/>
 </div>
 
 <div class="form-group row">
-    <label for="title" class="col-sm-2 col-form-label">タイトル</label>
     <div class="col-sm-10">
-        <input type="text" id="title" class="form-control" name="title" th:field="*{title}" th:errorclass="error">
+        <input type="text" id="title" class="form-control" name="title" th:field="*{title}" th:errorclass="error"
+               placeholder="タイトル">
         <ul th:if="${#fields.hasErrors('title')}" class="error-detail">
             <li th:each="error : ${#fields.errors('title')}" th:text="${error}"></li>
         </ul>
@@ -29,9 +35,8 @@
 </div>
 
 <div class="form-group row">
-    <label for="content" class="col-sm-2 col-form-label">本文</label>
     <div class="col-sm-10">
-        <textarea name="content" id="content" class="form-control" cols="30" rows="10"
+        <textarea name="content" id="content" class="form-control" cols="30" rows="10" placeholder="記事本文"
                   th:field="*{content}" th:errorclass="error"></textarea>
         <ul th:if="${#fields.hasErrors('content')}" class="error-detail">
             <li th:each="error : ${#fields.errors('content')}" th:text="${error}"></li>

@@ -14,6 +14,26 @@
         </collection>
     </resultMap>
 
+    <select id="findOneAsTree" resultMap="TreeArticleCategory">
+        SELECT
+        cate1.id        AS "id",
+        cate1.name      AS "name",
+        cate2.id        AS "sub_category.id",
+        cate2.name      AS "sub_category.name"
+
+        FROM article_categories cate1
+
+        LEFT OUTER JOIN article_categories cate2
+        ON cate1.id = cate2.parent_id
+
+        WHERE
+        cate1.parent_id IS NULL
+        AND
+        cate1.id = #{categoryId}
+
+        ORDER BY cate1.priority ASC, cate2.priority ASC;
+    </select>
+
     <select id="findAllAsTree" resultMap="TreeArticleCategory">
         SELECT
         cate1.id        AS "id",
@@ -29,6 +49,14 @@
         WHERE cate1.parent_id IS NULL
 
         ORDER BY cate1.priority ASC, cate2.priority ASC;
+    </select>
+
+    <select id="findOne" resultType="io.hub.guild.model.entity.article.ArticleCategory">
+        SELECT *
+
+        FROM article_categories
+
+        WHERE id = #{id}
     </select>
 
 </mapper>

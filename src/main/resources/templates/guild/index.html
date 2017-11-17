@@ -10,50 +10,48 @@
 <body>
 <div layout:fragment="content">
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <span>セブンス・リバース &gt;</span>
-                <div class="title-guild">
-                    <span th:text="${guildName}"></span>
-                </div>
+    <div class="row">
+        <div class="col">
+            <span>セブンス・リバース &gt;</span>
+            <div class="title-guild">
+                <span th:text="${guildName}"></span>
             </div>
         </div>
     </div>
 
-    <section class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <a th:href="@{/guilds/1/articles}">
-                                <i class="fa fa-bookmark-o"></i>
-                                Wiki
-                            </a>
-                        </h4>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <span th:text="${guildName}"></span>だけで共有する攻略情報まとめ
-                        </h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <a href="#">
-                                <i class="fa fa-camera"></i>
-                                Photo
-                            </a>
-                        </h4>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <span th:text="${guildName}"></span>だけで共有する写真
-                        </h6>
-                    </div>
+    <section class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/guilds/1/articles}">
+                            <i class="fa fa-bookmark-o"></i>
+                            Wiki
+                        </a>
+                    </h4>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <span th:text="${guildName}"></span>だけで共有する攻略情報まとめ
+                    </h6>
                 </div>
             </div>
         </div>
+        <!--
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="#">
+                            <i class="fa fa-camera"></i>
+                            Photo
+                        </a>
+                    </h4>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <span th:text="${guildName}"></span>だけで共有する写真
+                    </h6>
+                </div>
+            </div>
+        </div>
+        -->
     </section>
 </div>
 </body>

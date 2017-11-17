@@ -33,7 +33,8 @@
         SET
         title = #{entity.title},
         content = #{entity.content},
-        updated_at = #{entity.updatedAt}
+        updated_at = #{entity.updatedAt},
+        category_id = #{entity.categoryId}
         WHERE
         id = #{entity.id}
     </update>

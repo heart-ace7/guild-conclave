@@ -17,6 +17,11 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <nav class="nav">
+        <a class="nav-link"
+           th:href="@{/guilds/{id}/articles/{articleId}/edit(id=${guildId}, articleId=${articleId})}">編集</a>
+    </nav>
+
     <h2 th:text="${model.article.title}"></h2>
 
     <article th:utext="${model.article.htmlContent}"></article>

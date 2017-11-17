@@ -4,35 +4,45 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout/layout">
 <head>
-    <style>
-        .list-primary-category,
-        .list-secondary-category,
-        .list-article {
-            list-style: none;
-            padding: 0;
-        }
+    <link rel="stylesheet" th:href="@{/css/article.index.css}" href="../../static/css/article.index.css">
+    <script th:src="@{/js/article.index.js}" src="../../static/js/article.index.js"></script>
 
-        .item-article {
-            margin-top: 1rem;
-        }
-
-        .list-article {
-            margin-bottom: 1rem;
-        }
-
-        .sample {
-            height: 175px;
-            background: #4d90da;
-            border-radius: 5px 5px 0 0;
-        }
-    </style>
     <title>wiki</title>
 </head>
 <body>
 <div layout:fragment="content">
 
+    <div class="row" style="margin-bottom: .5rem;">
+        <div class="col-2">
+            <a id="btn-show-categories" href="javascript:void(0)" style="color: gray;">
+                <i class="fa fa-lg fa-list-ul"></i>
+            </a>
+        </div>
+        <div class="col-8" style="text-align: center; font-weight: bold;">&lt; Wiki &gt;</div>
+        <div class="col-2"></div>
+    </div>
+
+    <nav class="nav flex-column nav-primary-categories" style="display: none;">
+        <h6 style="margin: .5rem">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            カテゴリの表示
+        </h6>
+        <a class="nav-link" href="#" th:attr="data-category-id='all'">
+            すべて表示
+        </a>
+        <a class="nav-link" href="#" th:each="primaryCategory : ${model.categories}"
+           th:attr="data-category-id=${primaryCategory.id}">
+            <span th:text="${primaryCategory.name}">primary category</span>
+        </a>
+        <!--
+        <h4>カテゴリの管理</h4>
+        -->
+    </nav>
+    <div class="cover-nav-primary-categories" style="display: none;"></div>
+
     <ul class="list-primary-category">
-        <li th:each="primaryCategory : ${model.categories}">
+        <li class="item-primary-category"
+            th:each="primaryCategory : ${model.categories}" th:attr="data-category-id=${primaryCategory.id}">
             <div class="card">
 
                 <div class="sample">
@@ -43,9 +53,10 @@
                             <i class="fa fa-cog"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a th:href="@{/guilds/{id}/articles/input(id=${guildId})}"
+                            <a th:href="@{/guilds/{id}/articles/input/?categoryId={categoryId}(id=${guildId}, categoryId=${primaryCategory.id})}"
                                class="dropdown-item">
-                                <i class="fa fa-plus"></i>記事を書く</a>
+                                <i class="fa fa-plus"></i>記事を書く
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -64,22 +75,25 @@
                         <li th:each="article : ${secondaryCategory.articles}" class="item-article">
                             <div class="card">
                                 <div class="card-body" style="padding: .25rem 1rem">
-                                    <span class="badge badge-pill badge-secondary"
-                                          th:text="${secondaryCategory.name}">
-                                        secondary category
-                                    </span>
-                                    <h4 class="card-title" th:text="${article.title}">
-                                        article title
-                                    </h4>
+                                    <div class="card-title">
+                                        <span class="badge badge-pill badge-secondary"
+                                              th:text="${secondaryCategory.name}">
+                                            secondary category
+                                        </span>
+                                        <a th:href="@{/guilds/{id}/articles/{articleId}(id=${guildId}, articleId=${article.id})}"
+                                           th:text="${article.title}">
+                                            article title
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </li>
                     </ul>
+                    <div th:if="${#lists.isEmpty(secondaryCategory.articles)}" class="box-article-empty">
+                        <a th:href="@{/guilds/{id}/articles/input/?categoryId={categoryId}(id=${guildId}, categoryId=${primaryCategory.id})}">記事を書いて</a>ギルドメンバーに共有してみよう！
+                    </div>
                 </li>
             </ul>
-            <div th:if="${#lists.isEmpty(primaryCategory.secondaryCategories)}">
-                さあ、記事を書いて共有してみましょう！
-            </div>
         </li>
     </ul>
 </div>
