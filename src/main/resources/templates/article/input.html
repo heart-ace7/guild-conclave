@@ -11,12 +11,9 @@
     <script th:src="@{/js/simplemde.min.js}" src="../../static/js/simplemde.min.js"></script>
     <script>
         $(function () {
-            new SimpleMDE({
-                element: $("#content")[0],
-                autoDownloadFontAwesome: false,
-                hideIcons: HUB.simplemde.config.hideIcons,
-                showIcons: HUB.simplemde.config.showIcons
-            });
+            var config = Object.assign({element: $("#content")[0]}, HUB.simplemde.config);
+
+            new SimpleMDE(config);
         });
     </script>
 </head>
