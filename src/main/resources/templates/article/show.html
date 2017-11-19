@@ -7,21 +7,66 @@
     <meta charset="UTF-8">
     <title th:text="${model.article.title}"></title>
 
+    <style>
+        /* TODO move */
+        .nav-article-menu {
+            background: white;
+            right: -200px;
+            width: 50%;
+            z-index: 2;
+        }
+    </style>
     <script>
         $(function () {
             var article = $('article');
 
             article.find('table').addClass('table table-bordered table-sm');
             article.find('img').attr('style', 'max-width: 100%;');
+
+            // TODO move
+            var menuBtn = $('#btn-show-article-menu');
+
+            var nav = $('.nav-article-menu');
+            var cover = $('.cover');
+
+            cover.on('click', function () {
+                cover.hide();
+
+                nav.animate({right: '-200px'}, 200, function () {
+                    nav.hide();
+                });
+            });
+            menuBtn.on('click', function () {
+                cover.show();
+
+                nav.show().animate({right: '0'}, 200);
+            });
         });
     </script>
 </head>
 <body>
 <div layout:fragment="content">
-    <nav class="nav">
-        <a class="nav-link"
-           th:href="@{/guilds/{id}/articles/{articleId}/edit(id=${guildId}, articleId=${articleId})}">編集</a>
+    <div class="row" style="margin-bottom: .5rem;">
+        <div class="col-2">
+        </div>
+        <div class="col-8" style="text-align: center; font-weight: bold;">&lt; 記事 &gt;</div>
+        <div class="col-2" style="text-align: right;">
+            <a id="btn-show-article-menu" href="javascript:void(0)" style="color: gray;">
+                <i class="fa fa-lg fa-cog"></i>
+            </a>
+        </div>
+    </div>
+
+    <nav class="nav flex-column frontmost-side-menu nav-article-menu">
+        <h6 style="margin: .5rem">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            記事メニュー
+        </h6>
+        <a class="nav-link" th:href="@{/guilds/{id}/articles/{articleId}/edit(id=${guildId}, articleId=${articleId})}">
+            編集
+        </a>
     </nav>
+    <div class="cover"></div>
 
     <h2 th:text="${model.article.title}"></h2>
 

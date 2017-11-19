@@ -6,8 +6,17 @@
 <head>
     <link rel="stylesheet" th:href="@{/css/article.index.css}" href="../../static/css/article.index.css">
     <script th:src="@{/js/article.index.js}" src="../../static/js/article.index.js"></script>
-
     <title>wiki</title>
+
+    <style>
+        /* TODO move */
+        .nav-primary-categories {
+            background: white;
+            left: -200px;
+            width: 50%;
+            z-index: 2;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -22,7 +31,7 @@
         <div class="col-2"></div>
     </div>
 
-    <nav class="nav flex-column nav-primary-categories" style="display: none;">
+    <nav class="nav flex-column frontmost-side-menu nav-primary-categories">
         <h6 style="margin: .5rem">
             <i class="fa fa-angle-right" aria-hidden="true"></i>
             カテゴリの表示
@@ -38,14 +47,14 @@
         <h4>カテゴリの管理</h4>
         -->
     </nav>
-    <div class="cover-nav-primary-categories" style="display: none;"></div>
+    <div class="cover"></div>
 
     <ul class="list-primary-category">
         <li class="item-primary-category"
             th:each="primaryCategory : ${model.categories}" th:attr="data-category-id=${primaryCategory.id}">
             <div class="card">
 
-                <div class="sample">
+                <div class="card-header primary-category">
                     <div class="btn-group pull-right">
                         <button type="button" class="btn btn-light dropdown-toggle"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"

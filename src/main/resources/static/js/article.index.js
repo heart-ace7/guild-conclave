@@ -2,7 +2,7 @@ $(function () {
     var menuBtn = $('#btn-show-categories');
 
     var nav = $('.nav-primary-categories');
-    var cover = $('.cover-nav-primary-categories');
+    var cover = $('.cover');
 
     nav.find('.nav-link').on('click', function () {
         var link = $(this);
@@ -26,12 +26,9 @@ $(function () {
             nav.hide();
         });
     });
-
     menuBtn.on('click', function () {
         cover.show();
 
         nav.show().animate({left: '0'}, 200);
     });
-
-    cover.trigger('click');
 });

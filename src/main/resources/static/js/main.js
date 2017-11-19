@@ -57,7 +57,7 @@ $.fn.extend({
                         url: $(this).attr('action'),
                         type: $(this).attr('method'),
                         data: formData,
-                        async: false,
+                        async: true,
                         cache: false,
                         contentType: false,
                         processData: false

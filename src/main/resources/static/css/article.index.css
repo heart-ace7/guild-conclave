@@ -1,24 +1,3 @@
-.nav-primary-categories,
-.cover-nav-primary-categories {
-    height: 100%;
-
-    position: absolute;
-    left: 0;
-    top: 60px;
-}
-
-.nav-primary-categories {
-    background: white;
-    width: 50%;
-    z-index: 2;
-}
-
-.cover-nav-primary-categories {
-    background: rgba(0, 0, 0, .3);
-    width: 100%;
-    z-index: 1;
-}
-
 .list-primary-category,
 .list-secondary-category,
 .list-article {
@@ -34,10 +13,10 @@
     margin-bottom: 1rem;
 }
 
-.sample {
-    height: 100px;
+.card-header.primary-category {
     background: lightslategrey;
-    border-radius: 5px 5px 0 0;
+    height: 100px;
+    padding: 0;
 }
 
 .item-article .card-title {
