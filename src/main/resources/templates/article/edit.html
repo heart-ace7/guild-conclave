@@ -8,23 +8,21 @@
     <title>記事の更新</title>
 
     <link rel="stylesheet" th:href="@{/css/simplemde.min.css}" href="../../static/css/simplemde.min.css">
-    <script th:src="@{/js/simplemde.min.js}" src="../../static/js/simplemde.min.js"></script>
     <script>
         $(function () {
-            var config = Object.assign({element: $("#content")[0]}, HUB.simplemde.config);
-
-            new SimpleMDE(config);
+            $("#content").markdownEditor();
         });
     </script>
 </head>
 <body>
 <div layout:fragment="content">
     <form th:action="@{/guilds/{guildId}/articles/{articleId}/update(guildId=${guildId},articleId=${articleId})}"
-          th:method="put" th:object="${articleForm}">
+          th:method="PUT" th:object="${articleForm}">
         <div th:include="article/_form"></div>
 
         <button class="btn btn-primary" type="submit">更新する</button>
     </form>
+    <div th:include="article/_modal"></div>
 </div>
 </body>
 </html>

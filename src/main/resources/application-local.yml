@@ -3,3 +3,12 @@ spring:
     url: jdbc:postgresql://localhost/hub
     username: hub
     password: p@ssw0rd
+
+clouds:
+  aws:
+    s3:
+      endpoint-url: ""
+      region:       ""
+      access-key:   ""
+      secret-key:   ""
+      bucket-name:  ""

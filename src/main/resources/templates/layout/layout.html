@@ -16,17 +16,8 @@
 
     <script>
         var HUB = HUB || {};
-
-        HUB.simplemde = {
-            config: {
-                autoDownloadFontAwesome: false,
-                hideIcons: ["quote", "guide"],
-                showIcons: ["strikethrough", "|", "|", "table"],
-                shortcuts: [],
-                spellChecker: false
-            }
-        };
     </script>
+    <script th:src="@{/js/main.js}" src="../../static/js/main.js"></script>
 
     <title layout:title-pattern="$CONTENT_TITLE | $DECORATOR_TITLE">Guild Hub</title>
 </head>
