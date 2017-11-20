@@ -16,7 +16,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <form th:action="@{/guilds/{id}/articles/create(id=${guildId})}"
+    <form th:action="@{/guilds/{id}/articles(id=${guildId})}"
           th:method="POST" th:object="${articleForm}">
         <div th:include="article/_form"></div>
 

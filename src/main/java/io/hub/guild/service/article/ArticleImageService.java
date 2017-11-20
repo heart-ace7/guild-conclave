@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.UUID;
 
+import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+
 @Service
 @Transactional(readOnly = true)
 public class ArticleImageService {
@@ -38,20 +40,18 @@ public class ArticleImageService {
      * @param guildId ギルドID
      * @return dto
      */
-    public ArticleImageUploadDto upload(final InputStream is, final Long guildId) throws IOException {
+    public ArticleImageUploadDto upload(final InputStream is,
+                                        final Long guildId) throws IOException {
         final String imageDirectoryPath = createImageDirectoryPath(guildId);
         final String fileName = UUID.randomUUID().toString();
 
         try (final InputStream stream = convertImageFormat(is, UPLOAD_EXTENSION)) {
-            articleImageRepository.putObject(properties.getBucketName(), (imageDirectoryPath + fileName + "." + UPLOAD_EXTENSION), stream);
+            final String imagePath = imageDirectoryPath + fileName + "." + UPLOAD_EXTENSION;
+
+            articleImageRepository.putObject(properties.getBucketName(), imagePath, stream);
         }
 
-        final ArticleImageUploadDto dto = new ArticleImageUploadDto();
-        dto.setDirectoryPath(imageDirectoryPath);
-        dto.setFileName(fileName);
-        dto.setExtension(UPLOAD_EXTENSION);
-
-        return dto;
+        return new ArticleImageUploadDto(imageDirectoryPath, fileName, UPLOAD_EXTENSION);
     }
 
     /**
@@ -59,14 +59,16 @@ public class ArticleImageService {
      *
      * @param guildId  ギルドID
      * @param fileName 検索ファイル名
-     * @param function 書き込みfunction
      * @throws IOException
      */
-    public void fetchImage(final Long guildId, final String fileName, final ArticleImageFunction function) throws IOException {
+    public InputStream fetchImage(final Long guildId,
+                                  final String fileName) throws IOException {
         final String imageDirectoryPath = createImageDirectoryPath(guildId);
+        final String imagePath = imageDirectoryPath + fileName + "." + UPLOAD_EXTENSION;
 
-        final S3Object object = articleImageRepository.getObject(properties.getBucketName(), (imageDirectoryPath + fileName + "." + UPLOAD_EXTENSION));
-        function.writeImage(object.getObjectContent());
+        final S3Object object = articleImageRepository.getObject(properties.getBucketName(),
+                                                                 imagePath);
+        return object.getObjectContent();
     }
 
     /**
@@ -76,7 +78,8 @@ public class ArticleImageService {
      * @param formatName ファイル形式
      * @return 変換後のストリーム
      */
-    private InputStream convertImageFormat(final InputStream is, final String formatName) {
+    private InputStream convertImageFormat(final InputStream is,
+                                           final String formatName) {
         Assert.notNull(is, "InputStream must be non-null.");
         Assert.notNull(formatName, "Format name must be non-null.");
 
@@ -90,7 +93,8 @@ public class ArticleImageService {
                 return is;
             }
             // pngを変換すると色がおかしくなる場合があるので, Graphicに描画してから変換する
-            final BufferedImage image = new BufferedImage(tmp.getWidth(), tmp.getHeight(), BufferedImage.TYPE_INT_RGB);
+            final BufferedImage image = new BufferedImage(tmp.getWidth(), tmp.getHeight(),
+                                                          TYPE_INT_RGB);
             final Graphics graphics = image.getGraphics();
             graphics.drawImage(tmp, 0, 0, null);
             graphics.dispose();
@@ -112,7 +116,8 @@ public class ArticleImageService {
      * @return true: formatあり / false: formatなし
      * @throws IOException
      */
-    private boolean hasImageFormat(final BufferedImage is, final String formatName) throws IOException {
+    private boolean hasImageFormat(final BufferedImage is,
+                                   final String formatName) throws IOException {
         Assert.notNull(is, "InputStream must be non-null.");
         Assert.notNull(formatName, "Format name must be non-null.");
 
@@ -138,8 +143,4 @@ public class ArticleImageService {
         return "image/guild/" + guildId + "/article/";
     }
 
-    @FunctionalInterface
-    public interface ArticleImageFunction {
-        void writeImage(final InputStream in) throws IOException;
-    }
 }

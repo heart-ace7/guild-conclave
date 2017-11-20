@@ -20,8 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -111,7 +112,7 @@ public class ArticleController {
      * @param bindingResult
      * @return
      */
-    @PostMapping("guilds/{guildId}/articles/create")
+    @PostMapping("guilds/{guildId}/articles")
     public ModelAndView create(@PathVariable final Long guildId, @Valid final ArticleForm articleForm, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return renderInput(guildId, articleForm.getCategoryId());
@@ -151,7 +152,7 @@ public class ArticleController {
      * @param bindingResult
      * @return
      */
-    @PutMapping("guilds/{guildId}/articles/{articleId}/update")
+    @PutMapping("guilds/{guildId}/articles/{articleId}")
     public ModelAndView update(@PathVariable final Long guildId, @PathVariable final Long articleId, @Valid final ArticleForm articleForm, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return renderEdit(guildId, articleForm.getCategoryId());
@@ -159,6 +160,22 @@ public class ArticleController {
         articleService.updateArticle(articleId, articleForm.getSubCategoryId(), articleForm.getTitle(), articleForm.getContent());
 
         return new ModelAndView("redirect:/guilds/" + guildId + "/articles");
+    }
+
+    /**
+     * 記事を削除します.
+     *
+     * @param guildId ギルドID
+     * @return リダイレクト先
+     */
+    @DeleteMapping("guilds/{guildId}/articles/{articleId}")
+    public String delete(@PathVariable final Long guildId) {
+        //todo delete
+
+        final UriComponents uriComponents = MvcUriComponentsBuilder
+            .fromMethodCall(MvcUriComponentsBuilder.on(ArticleController.class).index(guildId))
+            .build();
+        return "redirect: " + uriComponents.getPath();
     }
 
     private ModelAndView renderInput(final Long guildId, final Long categoryId) {

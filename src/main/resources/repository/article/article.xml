@@ -39,4 +39,8 @@
         id = #{entity.id}
     </update>
 
+    <delete id="delete">
+        DELETE FROM articles WHERE id = #{articleId}
+    </delete>
+
 </mapper>

@@ -3,7 +3,6 @@ package io.hub.guild.controller.article;
 import com.google.common.collect.ImmutableMap;
 import io.hub.guild.model.internal.article.ArticleImageUploadDto;
 import io.hub.guild.service.article.ArticleImageService;
-import io.hub.guild.service.article.ArticleImageService.ArticleImageFunction;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +14,7 @@ import org.springframework.web.util.UriComponents;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 @RestController
@@ -25,23 +25,32 @@ public class ArticleImageController {
     private ArticleImageService articleImageService;
 
     @GetMapping(value = "guilds/{guildId}/article-images/{fileName}")
-    public void fetchImage(@PathVariable final Long guildId, @PathVariable final String fileName, final HttpServletResponse response) throws IOException {
-        final ArticleImageFunction function = in -> {
+    public void fetchImage(@PathVariable final Long guildId,
+                           @PathVariable final String fileName,
+                           final HttpServletResponse response) throws IOException {
+
+        try (final InputStream is = articleImageService.fetchImage(guildId, fileName)) {
             response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 
-            IOUtils.copy(in, response.getOutputStream());
-        };
-
-        articleImageService.fetchImage(guildId, fileName, function);
+            IOUtils.copy(is, response.getOutputStream());
+        }
     }
 
     @PostMapping(value = "guilds/{guildId}/article-images", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, String> uploadImage(@PathVariable final Long guildId, @RequestParam("imageFile") final MultipartFile imageFile) throws IOException {
-        final ArticleImageUploadDto dto = articleImageService.upload(imageFile.getInputStream(), guildId);
+    public Map<String, String> uploadImage(@PathVariable final Long guildId,
+                                           @RequestParam("imageFile") final MultipartFile imageFile
+    ) throws IOException {
 
+        final ArticleImageUploadDto dto;
+
+        try (final InputStream is = imageFile.getInputStream()) {
+            dto = articleImageService.upload(is, guildId);
+        }
         final UriComponents uriComponents = MvcUriComponentsBuilder
-                .fromMethodName(ArticleImageController.class, "fetchImage", guildId, dto.getFileName(), null)
-                .build();
+            .fromMethodName(ArticleImageController.class,
+                            "fetchImage",
+                            guildId, dto.getFileName(), null)
+            .build();
         return ImmutableMap.of("imagePath", uriComponents.getPath());
     }
 }

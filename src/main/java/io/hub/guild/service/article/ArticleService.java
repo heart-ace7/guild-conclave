@@ -100,6 +100,15 @@ public class ArticleService {
         }
     }
 
+    @Transactional
+    public void deleteArticle(final Long guildId,
+                              final Long articleId){
+        final int count = articleRepository.delete(articleId);
+        if (count != 1) {
+            throw new RuntimeException("invalid delete count.");
+        }
+    }
+
     public TreeArticleCategory fetchCategoriesBy(final Long articleId) {
         return articleCategoryRepository.findOneAsTree(articleId);
     }

@@ -16,7 +16,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <form th:action="@{/guilds/{guildId}/articles/{articleId}/update(guildId=${guildId},articleId=${articleId})}"
+    <form th:action="@{/guilds/{guildId}/articles/{articleId}(guildId=${guildId},articleId=${articleId})}"
           th:method="PUT" th:object="${articleForm}">
         <div th:include="article/_form"></div>
 

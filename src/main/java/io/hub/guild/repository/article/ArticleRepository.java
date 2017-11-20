@@ -16,4 +16,6 @@ public interface ArticleRepository {
     int insert(@Param("entity") final Article article);
 
     int update(@Param("entity") final Article article);
+
+    int delete(@Param("articleId") final Long id);
 }
