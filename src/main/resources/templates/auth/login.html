@@ -14,7 +14,7 @@
         </ul>
     </div>
 
-    <form th:action="@{/login}" th:method="post" th:object="${authForm}">
+    <form th:action="@{/login}" th:method="POST" th:object="${authForm}">
         <div class="form-group row">
             <div class="col-sm-10">
                 <input type="text" id="username" class="form-control" name="username" th:field="*{username}"

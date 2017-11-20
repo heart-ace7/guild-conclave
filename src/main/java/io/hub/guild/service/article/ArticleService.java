@@ -100,9 +100,15 @@ public class ArticleService {
         }
     }
 
+    /**
+     * 記事を削除します.
+     *
+     * @param guildId   ギルドID
+     * @param articleId 記事ID
+     */
     @Transactional
     public void deleteArticle(final Long guildId,
-                              final Long articleId){
+                              final Long articleId) {
         final int count = articleRepository.delete(articleId);
         if (count != 1) {
             throw new RuntimeException("invalid delete count.");

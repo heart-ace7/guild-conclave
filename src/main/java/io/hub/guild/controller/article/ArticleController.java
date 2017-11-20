@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
+
 @Controller
 @Secured("ROLE_USER")
 public class ArticleController {
@@ -159,7 +161,10 @@ public class ArticleController {
         }
         articleService.updateArticle(articleId, articleForm.getSubCategoryId(), articleForm.getTitle(), articleForm.getContent());
 
-        return new ModelAndView("redirect:/guilds/" + guildId + "/articles");
+        final UriComponents uriComponents = MvcUriComponentsBuilder
+                .fromMethodCall(on(ArticleController.class).show(guildId, articleId))
+                .build();
+        return new ModelAndView("redirect:" + uriComponents.getPath());
     }
 
     /**
@@ -169,13 +174,13 @@ public class ArticleController {
      * @return リダイレクト先
      */
     @DeleteMapping("guilds/{guildId}/articles/{articleId}")
-    public String delete(@PathVariable final Long guildId) {
-        //todo delete
+    public String delete(@PathVariable final Long guildId, @PathVariable final Long articleId) {
+        articleService.deleteArticle(guildId, articleId);
 
         final UriComponents uriComponents = MvcUriComponentsBuilder
-            .fromMethodCall(MvcUriComponentsBuilder.on(ArticleController.class).index(guildId))
-            .build();
-        return "redirect: " + uriComponents.getPath();
+                .fromMethodCall(on(ArticleController.class).index(guildId))
+                .build();
+        return "redirect:" + uriComponents.getPath();
     }
 
     private ModelAndView renderInput(final Long guildId, final Long categoryId) {
